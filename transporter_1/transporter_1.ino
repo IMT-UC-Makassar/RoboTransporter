@@ -9,15 +9,23 @@ ServoInputPin<21> ch3;
 const int MPSwitchPosition = 4;
 
 AF_DCMotor motorKiri(1);
+AF_DCMotor motorKiriDepan(4);
+
 AF_DCMotor motorKanan(2);
+AF_DCMotor motorKananDepan(3);
 
 int stickKiri=0;
 int stickKanan=0;
 int swMultiPosition;
 
-int topSpeed = 0;
+int topSpeed = 100;
 
 const float Deadzone = 0.15;
+
+  //Channel 1 & 2 itu buat 
+  int leftSpeed;
+  int rightSpeed;
+
 
 
 void setup() {
@@ -34,33 +42,60 @@ void loop() {
   Serial.print("ch2: "); Serial.print(stickKanan);Serial.print(" | ");
   Serial.print("ch3: "); Serial.print(swMultiPosition);Serial.println("");
 
+  //Channel 1 & 2 itu buat 
+  leftSpeed = stickKiri + stickKanan;
+  rightSpeed = stickKiri - stickKanan;
+
   controlMotor();
+  capitControl();
 }
 
 void controlMotor(){
-  if(stickKiri > 0){
+  if(leftSpeed > 0){
     motorKiri.run(FORWARD);
-    motorKiri.setSpeed(stickKiri*0.01*topSpeed);
+    motorKiriDepan.run(FORWARD);
+    motorKiri.setSpeed(leftSpeed);
+    motorKiriDepan.setSpeed(leftSpeed);
 
-  } else if(stickKiri < 0){
+  } else if(leftSpeed < 0){
     motorKiri.run(BACKWARD);
-    motorKiri.setSpeed(stickKiri*-0.01*topSpeed);
+    motorKiriDepan.run(BACKWARD);
+    motorKiri.setSpeed(leftSpeed * -1);
+    motorKiriDepan.setSpeed(leftSpeed * -1);
   } else {
     motorKiri.run(RELEASE);
+        motorKiriDepan.run(RELEASE);
+
   }
 
-  Serial.print("motor Kiri: "); Serial.print(stickKiri*0.01*topSpeed);Serial.print(" | ");
+  Serial.print("motor Kiri: "); Serial.print(leftSpeed);Serial.print(" | ");
 
-  if(stickKanan > 0){
+  if(rightSpeed > 0){
     motorKanan.run(FORWARD);
-    motorKanan.setSpeed(stickKanan*0.01*topSpeed);
+    motorKananDepan.run(FORWARD);
+    motorKanan.setSpeed(rightSpeed);
+    motorKananDepan.setSpeed(rightSpeed);
 
-  } else if(stickKanan < 0){
+  } else if(rightSpeed < 0){
     motorKanan.run(BACKWARD);
-    motorKanan.setSpeed(stickKanan*-0.01*topSpeed);
+    motorKananDepan.run(BACKWARD);
+    motorKanan.setSpeed(rightSpeed * -1);
+    motorKananDepan.setSpeed(rightSpeed * -1);
   } else {
     motorKanan.run(RELEASE);
+    motorKananDepan.run(RELEASE);
   }
-  Serial.print("motor Kanan: "); Serial.print(stickKanan*0.01*topSpeed);Serial.println("");
+  Serial.print("motor Kanan: "); Serial.print(rightSpeed);Serial.println("");
   delay(10);
+}
+
+void capitControl(){
+  if(swMultiPosition = 3){
+  //buka capit  
+  } else if(swMultiPosition =1){
+    //tutup capit
+  } else {
+    //nda ngapa-ngpain
+  }
+  }
 }
